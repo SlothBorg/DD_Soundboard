@@ -1,0 +1,6 @@
+https://darkestdungeon.fandom.com/wiki/Narrator_(Darkest_Dungeon)
+
+https://darkestdungeon.fandom.com/wiki/Narrator_%28Darkest_Dungeon%29
+
+wget --recursive --page-requisites --html-extension=on --convert-links="on" --no-parent https://darkestdungeon.fandom.com/wiki/Narrator_%28Darkest_Dungeon%29
+wget -E -H -k -K -p https://darkestdungeon.fandom.com/wiki/Narrator_%28Darkest_Dungeon%29
