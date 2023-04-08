@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 LINKS = []
 SECTIONS = []
 
-with open('test.html', 'r') as file_name:
+with open('webpage.html', 'r') as file_name:
     lines = [line.rstrip() for line in file_name]
 
     section = []
@@ -24,29 +24,44 @@ with open('test.html', 'r') as file_name:
         '</div>',
         '<span>',
         '</audio>',
-        '</span>',
     ]
     items_to_skip = [
         '<td style="color: #b2b7f2;',
         '<audio hidden="" ',
         '<a class="ext-audiobutton"',
+        '<img alt="SoundIcon.png"',
+        '<a href="https://static.wikia.nocookie.net/',
+        '<span class="mw-editsection-bracket">',
+        '<span class="mw-editsection">',
     ]
 
     for line in lines:
         line_cleaned = line.strip()
 
-        if line_cleaned.startswith('<p>'):
-            if section:
-                SECTIONS.append(section)
-            section = []
-
         if line_cleaned not in lines_to_skip:
             if not line_cleaned.startswith(tuple(items_to_skip)):
-                section.append(line_cleaned)
 
-    SECTIONS.append(section)
-
-    print(SECTIONS)
+                if line_cleaned.startswith('<a href="'):
+                    soup = BeautifulSoup(line, 'lxml')
+                    link = soup.find('a')
+                    line_cleaned = link.string
+                elif line_cleaned.startswith('<source src="https:'):
+                    soup = BeautifulSoup(line, 'lxml')
+                    link = soup.find('source')                    
+                    line_cleaned = link['src']
+                elif line_cleaned.startswith('<span class="mw-headline"'):
+                    line_dirty = line + '</span>'
+                    soup = BeautifulSoup(line_dirty, 'lxml')
+                    link = soup.find('span', {'class': 'mw-headline'})   
+                    print(link)                 
+                    line_cleaned = link.string
+                    if line_cleaned is None or line_cleaned == 'None':
+                        print('Is none!')
+                        print(line)
+                elif line_cleaned.startswith('<i>'):
+                    line_cleaned = line_cleaned.replace('<i>', '').replace('</i>', '')
+                
+                SECTIONS.append(line_cleaned)
 
 with open('data.html', mode='wt', encoding='utf-8') as file:
     for line in SECTIONS:
