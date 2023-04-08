@@ -24,6 +24,7 @@ with open('webpage.html', 'r') as file_name:
         '</div>',
         '<span>',
         '</audio>',
+        '</span>',
     ]
     items_to_skip = [
         '<td style="color: #b2b7f2;',
@@ -49,15 +50,15 @@ with open('webpage.html', 'r') as file_name:
                     soup = BeautifulSoup(line, 'lxml')
                     link = soup.find('source')                    
                     line_cleaned = link['src']
-                elif line_cleaned.startswith('<span class="mw-headline"'):
-                    line_dirty = line + '</span>'
-                    soup = BeautifulSoup(line_dirty, 'lxml')
-                    link = soup.find('span', {'class': 'mw-headline'})   
-                    print(link)                 
-                    line_cleaned = link.string
-                    if line_cleaned is None or line_cleaned == 'None':
-                        print('Is none!')
-                        print(line)
+                # elif line_cleaned.startswith('<span class="mw-headline"'):
+                #     line_dirty = line + '</span>'
+                #     soup = BeautifulSoup(line_dirty, 'lxml')
+                #     link = soup.find('span', {'class': 'mw-headline'})
+                #     print(link)
+                #     line_cleaned = link.string
+                #     if line_cleaned is None or line_cleaned == 'None':
+                #         print('Is none!')
+                #         print(line_cleaned)
                 elif line_cleaned.startswith('<i>'):
                     line_cleaned = line_cleaned.replace('<i>', '').replace('</i>', '')
                 
